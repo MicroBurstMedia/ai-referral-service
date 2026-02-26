@@ -1,164 +1,317 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>The Tax Literacy Sandbox</title>
-  <style>
-    html, body { margin:0; padding:0; height:100%; font-family: system-ui, Arial, sans-serif; }
-    #app { display:flex; height:100%; }
-    .pane { flex:1; overflow:auto; padding:16px; }
-    .left { border-right:1px solid #ddd; }
-    .banner { position:fixed; bottom:0; left:0; right:0; background:#222; color:#fff; padding:10px 16px; font-size:12px; z-index:9999; }
-    .row { margin-bottom:12px; }
-    .doc-canvas { border:1px dashed #aaa; height:360px; position:relative; }
-    .bbox { position:absolute; border:2px solid rgba(0, 128, 255, 0.6); cursor:pointer; }
-    .why { color:#0a58ca; font-size: 12px; }
-    .chat { position: sticky; bottom: 60px; background: #f7f7f7; padding: 8px; border:1px solid #ddd; }
-  </style>
+<meta charset="UTF-8">
+<title>Community Referral OS™</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin:0;
+    font-family:'Inter',sans-serif;
+    background:#f4f6f9;
+}
+header {
+    background:#0f172a;
+    color:white;
+    padding:20px;
+    text-align:center;
+    font-weight:600;
+    font-size:20px;
+}
+.container {
+    display:flex;
+    flex-wrap:wrap;
+    gap:20px;
+    padding:20px;
+}
+.card {
+    background:white;
+    border-radius:12px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.05);
+    padding:20px;
+    flex:1;
+    min-width:320px;
+}
+h2 { margin-top:0; }
+
+button {
+    padding:10px 14px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    margin:5px 0;
+}
+
+.primary { background:#2563eb; color:white; }
+.success { background:#16a34a; color:white; }
+
+.chat-box {
+    height:280px;
+    overflow-y:auto;
+    border:1px solid #ddd;
+    border-radius:8px;
+    padding:10px;
+    background:#fafafa;
+}
+.chat-input { display:flex; margin-top:10px; }
+.chat-input input {
+    flex:1;
+    padding:10px;
+    border-radius:6px;
+    border:1px solid #ccc;
+}
+
+form input, form select, form textarea {
+    width:100%;
+    padding:10px;
+    margin-bottom:10px;
+    border-radius:6px;
+    border:1px solid #ccc;
+}
+
+footer {
+    background:#0f172a;
+    color:white;
+    text-align:center;
+    padding:15px;
+    margin-top:20px;
+    font-size:13px;
+}
+footer a {
+    color:#60a5fa;
+    cursor:pointer;
+    margin:0 10px;
+}
+
+.modal {
+    display:none;
+    position:fixed;
+    z-index:999;
+    left:0; top:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.6);
+}
+.modal-content {
+    background:white;
+    margin:5% auto;
+    padding:20px;
+    width:90%;
+    max-width:700px;
+    border-radius:10px;
+    max-height:80%;
+    overflow-y:auto;
+}
+.close {
+    float:right;
+    font-weight:bold;
+    cursor:pointer;
+}
+.disclaimer {
+    font-size:12px;
+    color:#555;
+    margin-top:10px;
+}
+</style>
 </head>
+
 <body>
-<div id="app">
-  <div class="pane left">
-    <h2>Input Engine</h2>
-    <div class="row">
-      <input type="file" id="fileInput" accept="image/*,.pdf" />
-      <button id="uploadBtn">Upload</button>
-      <div id="uploadStatus"></div>
-    </div>
-    <div class="row">
-      <label>Filing Status</label>
-      <input type="range" id="filingStatus" min="0" max="4" step="1" />
-      <div id="filingStatusLabel">Single</div>
-    </div>
-    <div class="row">
-      <label>State Residency</label>
-      <input type="range" id="stateResidency" min="0" max="3" step="1" />
-      <div id="stateResidencyLabel">TX</div>
-    </div>
-    <div class="row">
-      <label>Tax Year</label>
-      <input type="range" id="taxYear" min="2024" max="2026" step="1" />
-      <div id="taxYearLabel">2026</div>
-    </div>
-    <div class="row">
-      <label>Additional Information</label>
-      <textarea id="additionalInfo" rows="4" style="width:100%"></textarea>
-    </div>
-    <div class="row">
-      <h3>Document Preview</h3>
-      <div id="docCanvas" class="doc-canvas"></div>
-    </div>
-  </div>
-  <div class="pane right">
-    <h2>Educational Assistant</h2>
-    <div id="explanations"></div>
-    <div class="chat">
-      <div><strong>Ask the sandbox</strong></div>
-      <input id="chatInput" style="width:80%" placeholder="What is ...?" />
-      <button id="chatBtn">Ask</button>
-      <div id="chatOut" style="white-space:pre-wrap; margin-top:8px;"></div>
-    </div>
-  </div>
+
+<header>
+Community Referral OS™ – Referral & Support Routing Platform
+</header>
+
+<div class="container">
+
+<!-- Chat Section -->
+<div class="card">
+<h2>AI People Operations Associate</h2>
+
+<div class="chat-box" id="chatBox"></div>
+
+<div class="chat-input">
+<input type="text" id="userMessage" placeholder="Type your message...">
+<button class="primary" onclick="sendMessage()">Send</button>
 </div>
-<div class="banner">This is a simulator for educational purposes. Results are not legal or financial advice.</div>
+
+<p class="disclaimer">
+We provide informational referral resources only. We do not provide legal, financial, tax, or employment advice.
+</p>
+</div>
+
+<!-- Referral Buttons -->
+<div class="card">
+<h2>Referral Resource Router</h2>
+
+<button class="primary" onclick="openReferral('employment')">Employment Resources</button><br>
+<button class="primary" onclick="openReferral('businessServices')">Business Services</button><br>
+<button class="primary" onclick="openReferral('incomeOpportunities')">Income Opportunities</button><br>
+<button class="primary" onclick="openReferral('communitySupport')">Community Support</button>
+
+<p class="disclaimer">
+We provide publicly available referral resources for informational purposes only. 
+Users must independently evaluate third-party services.
+</p>
+</div>
+
+<!-- Request Form -->
+<div class="card">
+<h2>Request for Details</h2>
+
+<form id="referralForm">
+
+<input type="text" name="fullName" placeholder="Full Name" required>
+<input type="email" name="email" placeholder="Email Address" required>
+<input type="text" name="location" placeholder="City / State" required>
+
+<select name="requestType" required>
+<option value="">Select Request Type</option>
+<option>Employment Assistance</option>
+<option>Business Services</option>
+<option>Income Opportunities</option>
+<option>Community Support</option>
+</select>
+
+<textarea name="details" placeholder="Describe your request..." required></textarea>
+
+<label>
+<input type="checkbox" required>
+I acknowledge this platform provides publicly available referral resources only.
+I understand I am solely responsible for independent due diligence and decisions.
+</label>
+
+<button class="success" type="submit">Submit Request</button>
+</form>
+
+<div id="statusMessage"></div>
+
+</div>
+</div>
+
+<footer>
+© 2026 Community Referral OS™ |
+<a onclick="openModal('affiliateModal')">Affiliate / Referral Disclaimer</a> |
+<a onclick="openModal('privacyModal')">Privacy Policy</a> |
+<a onclick="openModal('termsModal')">Terms of Service</a> |
+<a onclick="openModal('legalModal')">Legal Disclaimer</a>
+</footer>
+
+<!-- Modals -->
+<div id="affiliateModal" class="modal"><div class="modal-content">
+<span class="close" onclick="closeModal('affiliateModal')">X</span>
+<h3>Affiliate / Referral Disclosure</h3>
+<p>This platform may receive compensation for certain referrals. Compensation does not constitute endorsement, guarantee, or representation of service quality. Users are responsible for conducting independent evaluations.</p>
+</div></div>
+
+<div id="privacyModal" class="modal"><div class="modal-content">
+<span class="close" onclick="closeModal('privacyModal')">X</span>
+<h3>Privacy Policy</h3>
+<p>We collect name, email, location, and request details solely to route referral information. Data is stored securely and retained for operational purposes. Users may request deletion by contacting support.</p>
+</div></div>
+
+<div id="termsModal" class="modal"><div class="modal-content">
+<span class="close" onclick="closeModal('termsModal')">X</span>
+<h3>Terms of Service</h3>
+<p>By using this platform, you agree that we provide informational referral routing only. No advisory, fiduciary, or professional relationship is created. We are not responsible for third-party actions.</p>
+</div></div>
+
+<div id="legalModal" class="modal"><div class="modal-content">
+<span class="close" onclick="closeModal('legalModal')">X</span>
+<h3>Legal Disclaimer</h3>
+<p>This platform does not provide financial, legal, employment, tax, or medical advice. All decisions made based on referrals are at your sole discretion and responsibility.</p>
+</div></div>
+
 <script>
-const filingStatusOpts = ['Single','Married Filing Jointly','Married Filing Separately','Head of Household','Qualifying Widow(er)'];
-const stateOpts = ['TX','CA','NY','FL'];
 
-function postJson(url, data){
-  return fetch(url, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data)}).then(r=>r.json());
-}
+/* ============================
+   CONFIGURATION SECTION
+   Edit links anytime below
+============================ */
 
-function updateContext(){
-  const ctx = {
-    filing_status: filingStatusOpts[+document.getElementById('filingStatus').value] || 'Single',
-    state_residency: stateOpts[+document.getElementById('stateResidency').value] || 'TX',
-    year: +document.getElementById('taxYear').value || 2026,
-    additional_info: document.getElementById('additionalInfo').value || ''
-  };
-  postJson('/api/context', ctx);
-}
-
-['filingStatus','stateResidency','taxYear','additionalInfo'].forEach(id=>{
-  document.addEventListener('change', (e)=>{
-    if(e.target && e.target.id===id){
-      if(id==='filingStatus') document.getElementById('filingStatusLabel').textContent = filingStatusOpts[+e.target.value];
-      if(id==='stateResidency') document.getElementById('stateResidencyLabel').textContent = stateOpts[+e.target.value];
-      if(id==='taxYear') document.getElementById('taxYearLabel').textContent = e.target.value;
-      updateContext();
-    }
-  }, true);
-});
-
-const fileInput = document.getElementById('fileInput');
-const uploadBtn = document.getElementById('uploadBtn');
-const uploadStatus = document.getElementById('uploadStatus');
-const docCanvas = document.getElementById('docCanvas');
-const explanations = document.getElementById('explanations');
-
-uploadBtn.onclick = async ()=>{
-  if(!fileInput.files.length){ uploadStatus.textContent='Select a file'; return; }
-  const fd = new FormData();
-  fd.append('file', fileInput.files[0]);
-  uploadStatus.textContent = 'Uploading...';
-  const r = await fetch('/api/upload', {method:'POST', body: fd});
-  const j = await r.json();
-  if(!j.ok){ uploadStatus.textContent = 'Error: '+(j.error||''); return; }
-  uploadStatus.textContent = 'Uploaded';
-  renderBoxes(j.ocr);
+const REFERRAL_CONFIG = {
+  employment: "https://yourlink.com/employment",
+  businessServices: "https://yourlink.com/services",
+  incomeOpportunities: "https://yourlink.com/income",
+  communitySupport: "https://yourlink.com/support"
 };
 
-function renderBoxes(ocr){
-  docCanvas.innerHTML = '';
-  if(!ocr || !ocr.boxes) return;
-  const boxes = ocr.boxes.pages ? ocr.boxes.pages[0] : ocr.boxes;
-  if(!boxes || !boxes.left) return;
-  const W = docCanvas.clientWidth; const H = docCanvas.clientHeight;
-  const maxL = Math.max(...boxes.left); const maxT = Math.max(...boxes.top);
-  const maxW = Math.max(...boxes.width); const maxH = Math.max(...boxes.height);
-  for(let i=0;i<boxes.text.length;i++){
-    const txt = boxes.text[i]; if(!txt || txt===' ') continue;
-    const el = document.createElement('div'); el.className='bbox';
-    el.style.left = (boxes.left[i] % (W-10)) + 'px';
-    el.style.top = (boxes.top[i] % (H-10)) + 'px';
-    el.style.width = Math.min(boxes.width[i], 120) + 'px';
-    el.style.height = Math.min(boxes.height[i], 30) + 'px';
-    el.title = txt;
-    el.onmouseover = ()=> explainHover(txt, ocr.detected_form_type);
-    docCanvas.appendChild(el);
+const OPENAI_ENDPOINT = "YOUR_OPENAI_ENDPOINT";
+const APPS_SCRIPT_URL = "YOUR_APPS_SCRIPT_URL";
+
+/* ============================
+   Referral Router
+============================ */
+
+function openReferral(type) {
+  if(REFERRAL_CONFIG[type]) {
+    window.open(REFERRAL_CONFIG[type], "_blank");
   }
 }
 
-async function explainHover(text, formType){
-  const payload = {field: text, form_type: formType, meta:{}};
-  const res = await postJson('/api/explain', payload);
-  const block = document.createElement('div');
-  block.style.border='1px solid #ddd'; block.style.padding='8px'; block.style.margin='8px 0';
-  block.innerHTML = `<div><strong>${res.form_type||''} - ${res.field||''}</strong></div>
-  <div>${res.explanation||''}</div>
-  <div class='why'>Why: ${(res.why||[]).map(w=>`<a href='${w.url}' target='_blank' rel='noopener'>${w.title}</a>`).join(' | ')}</div>
-  <div style='font-size:12px; margin-top:6px;'>Citations: ${(res.citations||[]).map(c=>`<a href='${c.source}' target='_blank' rel='noopener'>${c.source}</a>`).join(' | ')}</div>`;
-  explanations.prepend(block);
+/* ============================
+   Chatbot
+============================ */
+
+async function sendMessage() {
+    const input = document.getElementById("userMessage");
+    const chatBox = document.getElementById("chatBox");
+    const userText = input.value;
+    if (!userText) return;
+
+    chatBox.innerHTML += `<p><strong>You:</strong> ${userText}</p>`;
+    input.value = "";
+
+    const response = await fetch(OPENAI_ENDPOINT, {
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({message:userText})
+    });
+
+    const data = await response.json();
+    chatBox.innerHTML += `<p><strong>Assistant:</strong> ${data.reply}</p>`;
+    chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-const chatBtn = document.getElementById('chatBtn');
-const chatInput = document.getElementById('chatInput');
-const chatOut = document.getElementById('chatOut');
-chatBtn.onclick = async ()=>{
-  const q = chatInput.value.trim(); if(!q) return;
-  const res = await postJson('/api/chat', {question:q});
-  chatOut.textContent = res.answer || '';
-  if(res.citations && res.citations.length){
-    chatOut.innerHTML += '\n\n' + res.citations.map(c=>`Source: <a href='${c.source}' target='_blank' rel='noopener'>${c.source}</a>`).join(' | ');
+/* ============================
+   Form Submission
+============================ */
+
+document.getElementById("referralForm").addEventListener("submit", async function(e){
+    e.preventDefault();
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData.entries());
+
+    await fetch(APPS_SCRIPT_URL, {
+        method:"POST",
+        body:JSON.stringify(data)
+    });
+
+    document.getElementById("statusMessage").innerText =
+        "Request submitted successfully. Please check your email.";
+    this.reset();
+});
+
+/* ============================
+   Modal Controls
+============================ */
+
+function openModal(id){
+    document.getElementById(id).style.display="block";
+}
+function closeModal(id){
+    document.getElementById(id).style.display="none";
+}
+
+window.onclick=function(event){
+  const modals=document.getElementsByClassName("modal");
+  for(let modal of modals){
+    if(event.target===modal){ modal.style.display="none"; }
   }
 };
 
-window.addEventListener('beforeunload', ()=>{
-  navigator.sendBeacon('/api/session/end');
-});
-
-updateContext();
 </script>
+
 </body>
 </html>
