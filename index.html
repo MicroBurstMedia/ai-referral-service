@@ -1,0 +1,164 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Tax Literacy Sandbox</title>
+  <style>
+    html, body { margin:0; padding:0; height:100%; font-family: system-ui, Arial, sans-serif; }
+    #app { display:flex; height:100%; }
+    .pane { flex:1; overflow:auto; padding:16px; }
+    .left { border-right:1px solid #ddd; }
+    .banner { position:fixed; bottom:0; left:0; right:0; background:#222; color:#fff; padding:10px 16px; font-size:12px; z-index:9999; }
+    .row { margin-bottom:12px; }
+    .doc-canvas { border:1px dashed #aaa; height:360px; position:relative; }
+    .bbox { position:absolute; border:2px solid rgba(0, 128, 255, 0.6); cursor:pointer; }
+    .why { color:#0a58ca; font-size: 12px; }
+    .chat { position: sticky; bottom: 60px; background: #f7f7f7; padding: 8px; border:1px solid #ddd; }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div class="pane left">
+    <h2>Input Engine</h2>
+    <div class="row">
+      <input type="file" id="fileInput" accept="image/*,.pdf" />
+      <button id="uploadBtn">Upload</button>
+      <div id="uploadStatus"></div>
+    </div>
+    <div class="row">
+      <label>Filing Status</label>
+      <input type="range" id="filingStatus" min="0" max="4" step="1" />
+      <div id="filingStatusLabel">Single</div>
+    </div>
+    <div class="row">
+      <label>State Residency</label>
+      <input type="range" id="stateResidency" min="0" max="3" step="1" />
+      <div id="stateResidencyLabel">TX</div>
+    </div>
+    <div class="row">
+      <label>Tax Year</label>
+      <input type="range" id="taxYear" min="2024" max="2026" step="1" />
+      <div id="taxYearLabel">2026</div>
+    </div>
+    <div class="row">
+      <label>Additional Information</label>
+      <textarea id="additionalInfo" rows="4" style="width:100%"></textarea>
+    </div>
+    <div class="row">
+      <h3>Document Preview</h3>
+      <div id="docCanvas" class="doc-canvas"></div>
+    </div>
+  </div>
+  <div class="pane right">
+    <h2>Educational Assistant</h2>
+    <div id="explanations"></div>
+    <div class="chat">
+      <div><strong>Ask the sandbox</strong></div>
+      <input id="chatInput" style="width:80%" placeholder="What is ...?" />
+      <button id="chatBtn">Ask</button>
+      <div id="chatOut" style="white-space:pre-wrap; margin-top:8px;"></div>
+    </div>
+  </div>
+</div>
+<div class="banner">This is a simulator for educational purposes. Results are not legal or financial advice.</div>
+<script>
+const filingStatusOpts = ['Single','Married Filing Jointly','Married Filing Separately','Head of Household','Qualifying Widow(er)'];
+const stateOpts = ['TX','CA','NY','FL'];
+
+function postJson(url, data){
+  return fetch(url, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(data)}).then(r=>r.json());
+}
+
+function updateContext(){
+  const ctx = {
+    filing_status: filingStatusOpts[+document.getElementById('filingStatus').value] || 'Single',
+    state_residency: stateOpts[+document.getElementById('stateResidency').value] || 'TX',
+    year: +document.getElementById('taxYear').value || 2026,
+    additional_info: document.getElementById('additionalInfo').value || ''
+  };
+  postJson('/api/context', ctx);
+}
+
+['filingStatus','stateResidency','taxYear','additionalInfo'].forEach(id=>{
+  document.addEventListener('change', (e)=>{
+    if(e.target && e.target.id===id){
+      if(id==='filingStatus') document.getElementById('filingStatusLabel').textContent = filingStatusOpts[+e.target.value];
+      if(id==='stateResidency') document.getElementById('stateResidencyLabel').textContent = stateOpts[+e.target.value];
+      if(id==='taxYear') document.getElementById('taxYearLabel').textContent = e.target.value;
+      updateContext();
+    }
+  }, true);
+});
+
+const fileInput = document.getElementById('fileInput');
+const uploadBtn = document.getElementById('uploadBtn');
+const uploadStatus = document.getElementById('uploadStatus');
+const docCanvas = document.getElementById('docCanvas');
+const explanations = document.getElementById('explanations');
+
+uploadBtn.onclick = async ()=>{
+  if(!fileInput.files.length){ uploadStatus.textContent='Select a file'; return; }
+  const fd = new FormData();
+  fd.append('file', fileInput.files[0]);
+  uploadStatus.textContent = 'Uploading...';
+  const r = await fetch('/api/upload', {method:'POST', body: fd});
+  const j = await r.json();
+  if(!j.ok){ uploadStatus.textContent = 'Error: '+(j.error||''); return; }
+  uploadStatus.textContent = 'Uploaded';
+  renderBoxes(j.ocr);
+};
+
+function renderBoxes(ocr){
+  docCanvas.innerHTML = '';
+  if(!ocr || !ocr.boxes) return;
+  const boxes = ocr.boxes.pages ? ocr.boxes.pages[0] : ocr.boxes;
+  if(!boxes || !boxes.left) return;
+  const W = docCanvas.clientWidth; const H = docCanvas.clientHeight;
+  const maxL = Math.max(...boxes.left); const maxT = Math.max(...boxes.top);
+  const maxW = Math.max(...boxes.width); const maxH = Math.max(...boxes.height);
+  for(let i=0;i<boxes.text.length;i++){
+    const txt = boxes.text[i]; if(!txt || txt===' ') continue;
+    const el = document.createElement('div'); el.className='bbox';
+    el.style.left = (boxes.left[i] % (W-10)) + 'px';
+    el.style.top = (boxes.top[i] % (H-10)) + 'px';
+    el.style.width = Math.min(boxes.width[i], 120) + 'px';
+    el.style.height = Math.min(boxes.height[i], 30) + 'px';
+    el.title = txt;
+    el.onmouseover = ()=> explainHover(txt, ocr.detected_form_type);
+    docCanvas.appendChild(el);
+  }
+}
+
+async function explainHover(text, formType){
+  const payload = {field: text, form_type: formType, meta:{}};
+  const res = await postJson('/api/explain', payload);
+  const block = document.createElement('div');
+  block.style.border='1px solid #ddd'; block.style.padding='8px'; block.style.margin='8px 0';
+  block.innerHTML = `<div><strong>${res.form_type||''} - ${res.field||''}</strong></div>
+  <div>${res.explanation||''}</div>
+  <div class='why'>Why: ${(res.why||[]).map(w=>`<a href='${w.url}' target='_blank' rel='noopener'>${w.title}</a>`).join(' | ')}</div>
+  <div style='font-size:12px; margin-top:6px;'>Citations: ${(res.citations||[]).map(c=>`<a href='${c.source}' target='_blank' rel='noopener'>${c.source}</a>`).join(' | ')}</div>`;
+  explanations.prepend(block);
+}
+
+const chatBtn = document.getElementById('chatBtn');
+const chatInput = document.getElementById('chatInput');
+const chatOut = document.getElementById('chatOut');
+chatBtn.onclick = async ()=>{
+  const q = chatInput.value.trim(); if(!q) return;
+  const res = await postJson('/api/chat', {question:q});
+  chatOut.textContent = res.answer || '';
+  if(res.citations && res.citations.length){
+    chatOut.innerHTML += '\n\n' + res.citations.map(c=>`Source: <a href='${c.source}' target='_blank' rel='noopener'>${c.source}</a>`).join(' | ');
+  }
+};
+
+window.addEventListener('beforeunload', ()=>{
+  navigator.sendBeacon('/api/session/end');
+});
+
+updateContext();
+</script>
+</body>
+</html>
