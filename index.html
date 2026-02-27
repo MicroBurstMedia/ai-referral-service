@@ -2,73 +2,66 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Community Referral OS™</title>
+<title>Community Resources Referral Center</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
-body {
+html, body {
+    height:100%;
     margin:0;
     font-family:'Inter',sans-serif;
     background:#f4f6f9;
+    display:flex;
+    flex-direction:column;
 }
+
 header {
     background:#0f172a;
     color:white;
     padding:20px;
     text-align:center;
-    font-weight:600;
     font-size:20px;
+    font-weight:600;
 }
-.container {
-    display:flex;
-    flex-wrap:wrap;
+
+.main-content {
+    flex:1;
+    padding:30px;
+}
+
+h2 {
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
     gap:20px;
-    padding:20px;
 }
+
 .card {
     background:white;
+    padding:20px;
     border-radius:12px;
     box-shadow:0 8px 20px rgba(0,0,0,0.05);
-    padding:20px;
-    flex:1;
-    min-width:320px;
-}
-h2 { margin-top:0; }
-
-button {
-    padding:10px 14px;
-    border:none;
-    border-radius:6px;
+    transition:0.3s ease;
     cursor:pointer;
-    margin:5px 0;
 }
 
-.primary { background:#2563eb; color:white; }
-.success { background:#16a34a; color:white; }
-
-.chat-box {
-    height:280px;
-    overflow-y:auto;
-    border:1px solid #ddd;
-    border-radius:8px;
-    padding:10px;
-    background:#fafafa;
-}
-.chat-input { display:flex; margin-top:10px; }
-.chat-input input {
-    flex:1;
-    padding:10px;
-    border-radius:6px;
-    border:1px solid #ccc;
+.card:hover {
+    transform:translateY(-5px);
 }
 
-form input, form select, form textarea {
-    width:100%;
-    padding:10px;
-    margin-bottom:10px;
-    border-radius:6px;
-    border:1px solid #ccc;
+.card h3 {
+    margin-top:0;
+    font-size:16px;
+}
+
+.card p {
+    font-size:14px;
+    color:#555;
 }
 
 footer {
@@ -76,43 +69,62 @@ footer {
     color:white;
     text-align:center;
     padding:15px;
-    margin-top:20px;
     font-size:13px;
 }
+
 footer a {
     color:#60a5fa;
-    cursor:pointer;
     margin:0 10px;
+    cursor:pointer;
 }
 
+/* Modal */
 .modal {
     display:none;
     position:fixed;
     z-index:999;
-    left:0; top:0;
+    left:0;
+    top:0;
     width:100%;
     height:100%;
     background:rgba(0,0,0,0.6);
 }
+
 .modal-content {
     background:white;
-    margin:5% auto;
-    padding:20px;
+    margin:8% auto;
+    padding:25px;
     width:90%;
-    max-width:700px;
+    max-width:420px;
     border-radius:10px;
-    max-height:80%;
-    overflow-y:auto;
 }
-.close {
-    float:right;
-    font-weight:bold;
+
+.modal-content h3 {
+    margin-top:0;
+}
+
+.modal-content input {
+    width:100%;
+    padding:10px;
+    margin-bottom:12px;
+    border-radius:6px;
+    border:1px solid #ccc;
+}
+
+.modal-content button {
+    width:100%;
+    padding:10px;
+    border:none;
+    border-radius:6px;
+    background:#16a34a;
+    color:white;
     cursor:pointer;
 }
-.disclaimer {
-    font-size:12px;
-    color:#555;
-    margin-top:10px;
+
+.close {
+    float:right;
+    cursor:pointer;
+    font-weight:bold;
 }
 </style>
 </head>
@@ -120,197 +132,150 @@ footer a {
 <body>
 
 <header>
-Community Referral OS™ – Referral & Support Routing Platform
+Welcome to the Community Resources Center!
 </header>
 
-<div class="container">
+<div class="main-content">
 
-<!-- Chat Section -->
-<div class="card">
-<h2>AI People Operations Associate</h2>
+<h2>Connecting You to What You Need</h2>
+<p style="text-align: center;">Simply select anyone of the following or more options shown here at your convenience, fill out the request details form, and information will be delivered staright to the email address on file.</p>
 
-<div class="chat-box" id="chatBox"></div>
+<p style="text-align: center;">Please be sure to check your email inox and spam folders. Should you run into any issues please email our support team at microburstmediasolutions@outlook.com for assistance.</p>
 
-<div class="chat-input">
-<input type="text" id="userMessage" placeholder="Type your message...">
-<button class="primary" onclick="sendMessage()">Send</button>
+<div class="grid">
+
+<!-- 15 Referral Buttons -->
+
+<div class="card" onclick="openForm('Employment Assistance')">
+<h3>Employment Assistance</h3>
+<p>Connect with publicly available job opportunity resources in your area.</p>
 </div>
 
-<p class="disclaimer">
-We provide informational referral resources only. We do not provide legal, financial, tax, or employment advice.
+<div class="card" onclick="openForm('Small Business Services')">
+<h3>Small Business Services</h3>
+<p>Find professional service providers supporting local business needs.</p>
+</div>
+
+<div class="card" onclick="openForm('Income Opportunities')">
+<h3>Income Opportunities</h3>
+<p>Access informational resources about earning income options.</p>
+</div>
+
+<div class="card" onclick="openForm('Community Support Programs')">
+<h3>Community Support Programs</h3>
+<p>Explore assistance programs offered within the community.</p>
+</div>
+
+<div class="card" onclick="openForm('Housing Resources')">
+<h3>Housing Resources</h3>
+<p>Locate publicly listed housing and rental assistance programs.</p>
+</div>
+
+<div class="card" onclick="openForm('Education & Training')">
+<h3>Education & Training</h3>
+<p>Discover skills development and certification resources.</p>
+</div>
+
+<div class="card" onclick="openForm('Health & Wellness Services')">
+<h3>Health & Wellness Services</h3>
+<p>Find publicly available wellness and support service listings.</p>
+</div>
+
+<div class="card" onclick="openForm('Legal Information Resources')">
+<h3>Legal Information Resources</h3>
+<p>Access general informational resources related to legal services.</p>
+</div>
+
+<div class="card" onclick="openForm('Financial Literacy Resources')">
+<h3>Financial Literacy Resources</h3>
+<p>Review educational materials about budgeting and financial awareness.</p>
+</div>
+
+<div class="card" onclick="openForm('Non-Profit Organizations')">
+<h3>Non-Profit Organizations</h3>
+<p>Explore charitable and non-profit entities serving the community.</p>
+</div>
+
+<div class="card" onclick="openForm('Technology Support Services')">
+<h3>Technology Support Services</h3>
+<p>Find publicly listed technical support and IT service providers.</p>
+</div>
+
+<div class="card" onclick="openForm('Youth Programs')">
+<h3>Youth Programs</h3>
+<p>Discover youth mentorship and enrichment program listings.</p>
+</div>
+
+<div class="card" onclick="openForm('Senior Assistance Services')">
+<h3>Senior Assistance Services</h3>
+<p>Locate publicly available senior support resources.</p>
+</div>
+
+<div class="card" onclick="openForm('Entrepreneurship Programs')">
+<h3>Entrepreneurship Programs</h3>
+<p>Explore startup guidance and small enterprise informational resources.</p>
+</div>
+
+<div class="card" onclick="openForm('Workforce Development')">
+<h3>Workforce Development</h3>
+<p>Access workforce readiness and skills improvement programs.</p>
+</div>
+
+</div>
+</div>
+
+<!-- Request Form Modal -->
+
+<div id="requestModal" class="modal">
+<div class="modal-content">
+<span class="close" onclick="closeForm()">X</span>
+<h3 id="formTitle">Request Details</h3>
+
+<p style="font-size:13px;color:#555;">
+Please submit your details to receive informational referral resources.
 </p>
-</div>
 
-<!-- Referral Buttons -->
-<div class="card">
-<h2>Referral Resource Router</h2>
+<input type="text" placeholder="Full Name" required>
+<input type="email" placeholder="Email Address" required>
 
-<button class="primary" onclick="openReferral('employment')">Employment Resources</button><br>
-<button class="primary" onclick="openReferral('businessServices')">Business Services</button><br>
-<button class="primary" onclick="openReferral('incomeOpportunities')">Income Opportunities</button><br>
-<button class="primary" onclick="openReferral('communitySupport')">Community Support</button>
-
-<p class="disclaimer">
-We provide publicly available referral resources for informational purposes only. 
-Users must independently evaluate third-party services.
-</p>
-</div>
-
-<!-- Request Form -->
-<div class="card">
-<h2>Request for Details</h2>
-
-<form id="referralForm">
-
-<input type="text" name="fullName" placeholder="Full Name" required>
-<input type="email" name="email" placeholder="Email Address" required>
-<input type="text" name="location" placeholder="City / State" required>
-
-<select name="requestType" required>
-<option value="">Select Request Type</option>
-<option>Employment Assistance</option>
-<option>Business Services</option>
-<option>Income Opportunities</option>
-<option>Community Support</option>
-</select>
-
-<textarea name="details" placeholder="Describe your request..." required></textarea>
-
-<label>
+<label style="font-size:12px;">
 <input type="checkbox" required>
-I acknowledge this platform provides publicly available referral resources only.
-I understand I am solely responsible for independent due diligence and decisions.
+I acknowledge this platform provides publicly available referral resources only and I am solely responsible for independent decisions.
 </label>
 
-<button class="success" type="submit">Submit Request</button>
-</form>
-
-<div id="statusMessage"></div>
+<button onclick="submitForm()">Submit Request</button>
 
 </div>
 </div>
 
 <footer>
-© 2026 Community Referral OS™ |
-<a onclick="openModal('affiliateModal')">Affiliate / Referral Disclaimer</a> |
-<a onclick="openModal('privacyModal')">Privacy Policy</a> |
-<a onclick="openModal('termsModal')">Terms of Service</a> |
-<a onclick="openModal('legalModal')">Legal Disclaimer</a>
+© 2026 Community Resources Referral Center OS™ |
+<a onclick="alert('Affiliate Disclosure: We may receive compensation for certain referrals.')">Affiliate Disclosure</a> |
+<a onclick="alert('Privacy Policy: We collect minimal data for referral routing purposes only.')">Privacy Policy</a> |
+<a onclick="alert('Terms of Service: Use of this platform constitutes agreement to our referral-only policy.')">Terms</a> |
+<a onclick="alert('Legal Disclaimer: We do not provide financial, legal, or employment advice.')">Legal Disclaimer</a>
 </footer>
 
-<!-- Modals -->
-<div id="affiliateModal" class="modal"><div class="modal-content">
-<span class="close" onclick="closeModal('affiliateModal')">X</span>
-<h3>Affiliate / Referral Disclosure</h3>
-<p>This platform may receive compensation for certain referrals. Compensation does not constitute endorsement, guarantee, or representation of service quality. Users are responsible for conducting independent evaluations.</p>
-</div></div>
-
-<div id="privacyModal" class="modal"><div class="modal-content">
-<span class="close" onclick="closeModal('privacyModal')">X</span>
-<h3>Privacy Policy</h3>
-<p>We collect name, email, location, and request details solely to route referral information. Data is stored securely and retained for operational purposes. Users may request deletion by contacting support.</p>
-</div></div>
-
-<div id="termsModal" class="modal"><div class="modal-content">
-<span class="close" onclick="closeModal('termsModal')">X</span>
-<h3>Terms of Service</h3>
-<p>By using this platform, you agree that we provide informational referral routing only. No advisory, fiduciary, or professional relationship is created. We are not responsible for third-party actions.</p>
-</div></div>
-
-<div id="legalModal" class="modal"><div class="modal-content">
-<span class="close" onclick="closeModal('legalModal')">X</span>
-<h3>Legal Disclaimer</h3>
-<p>This platform does not provide financial, legal, employment, tax, or medical advice. All decisions made based on referrals are at your sole discretion and responsibility.</p>
-</div></div>
-
 <script>
-
-/* ============================
-   CONFIGURATION SECTION
-   Edit links anytime below
-============================ */
-
-const REFERRAL_CONFIG = {
-  employment: "https://yourlink.com/employment",
-  businessServices: "https://yourlink.com/services",
-  incomeOpportunities: "https://yourlink.com/income",
-  communitySupport: "https://yourlink.com/support"
-};
-
-const OPENAI_ENDPOINT = "YOUR_OPENAI_ENDPOINT";
-const APPS_SCRIPT_URL = "YOUR_APPS_SCRIPT_URL";
-
-/* ============================
-   Referral Router
-============================ */
-
-function openReferral(type) {
-  if(REFERRAL_CONFIG[type]) {
-    window.open(REFERRAL_CONFIG[type], "_blank");
-  }
+function openForm(title){
+    document.getElementById("formTitle").innerText = title + " – Request Details";
+    document.getElementById("requestModal").style.display = "block";
 }
 
-/* ============================
-   Chatbot
-============================ */
-
-async function sendMessage() {
-    const input = document.getElementById("userMessage");
-    const chatBox = document.getElementById("chatBox");
-    const userText = input.value;
-    if (!userText) return;
-
-    chatBox.innerHTML += `<p><strong>You:</strong> ${userText}</p>`;
-    input.value = "";
-
-    const response = await fetch(OPENAI_ENDPOINT, {
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({message:userText})
-    });
-
-    const data = await response.json();
-    chatBox.innerHTML += `<p><strong>Assistant:</strong> ${data.reply}</p>`;
-    chatBox.scrollTop = chatBox.scrollHeight;
+function closeForm(){
+    document.getElementById("requestModal").style.display = "none";
 }
 
-/* ============================
-   Form Submission
-============================ */
-
-document.getElementById("referralForm").addEventListener("submit", async function(e){
-    e.preventDefault();
-    const formData = new FormData(this);
-    const data = Object.fromEntries(formData.entries());
-
-    await fetch(APPS_SCRIPT_URL, {
-        method:"POST",
-        body:JSON.stringify(data)
-    });
-
-    document.getElementById("statusMessage").innerText =
-        "Request submitted successfully. Please check your email.";
-    this.reset();
-});
-
-/* ============================
-   Modal Controls
-============================ */
-
-function openModal(id){
-    document.getElementById(id).style.display="block";
-}
-function closeModal(id){
-    document.getElementById(id).style.display="none";
+function submitForm(){
+    alert("Request submitted (Design Prototype Mode)");
+    closeForm();
 }
 
-window.onclick=function(event){
-  const modals=document.getElementsByClassName("modal");
-  for(let modal of modals){
-    if(event.target===modal){ modal.style.display="none"; }
-  }
-};
-
+window.onclick = function(event){
+    if(event.target == document.getElementById("requestModal")){
+        closeForm();
+    }
+}
 </script>
 
 </body>
