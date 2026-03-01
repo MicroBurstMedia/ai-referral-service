@@ -2,129 +2,158 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Community Resources Referral Center</title>
+<title>Business Community Resources Referral Center</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
 html, body {
-    height:100%;
-    margin:0;
-    font-family:'Inter',sans-serif;
-    background:#f4f6f9;
-    display:flex;
-    flex-direction:column;
+    height: 100%;
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: #f4f6f9;
+    display: flex;
+    flex-direction: column;
 }
 
 header {
-    background:#0f172a;
-    color:white;
-    padding:20px;
-    text-align:center;
-    font-size:20px;
-    font-weight:600;
+    background: #0f172a;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
 }
 
 .main-content {
-    flex:1;
-    padding:30px;
+    flex: 1;
+    padding: 30px;
 }
 
 h2 {
-    text-align:center;
-    margin-bottom:25px;
+    text-align: center;
+    margin-bottom: 25px;
 }
 
 .grid {
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-    gap:20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
 }
 
 .card {
-    background:white;
-    padding:20px;
-    border-radius:12px;
-    box-shadow:0 8px 20px rgba(0,0,0,0.05);
-    transition:0.3s ease;
-    cursor:pointer;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    transition: 0.3s ease;
+    cursor: pointer;
 }
 
 .card:hover {
-    transform:translateY(-5px);
+    transform: translateY(-5px);
+}
+
+/* New Image Styles for Cards */
+.card img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    background: #e2e8f0; /* Fallback color before image loads */
 }
 
 .card h3 {
-    margin-top:0;
-    font-size:16px;
+    margin-top: 0;
+    font-size: 16px;
 }
 
 .card p {
-    font-size:14px;
-    color:#555;
+    font-size: 14px;
+    color: #555;
 }
 
 footer {
-    background:#0f172a;
-    color:white;
-    text-align:center;
-    padding:15px;
-    font-size:13px;
+    background: #0f172a;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    font-size: 13px;
 }
 
 footer a {
-    color:#60a5fa;
-    margin:0 10px;
-    cursor:pointer;
+    color: #60a5fa;
+    margin: 0 10px;
+    cursor: pointer;
 }
 
 /* Modal */
 .modal {
-    display:none;
-    position:fixed;
-    z-index:999;
-    left:0;
-    top:0;
-    width:100%;
-    height:100%;
-    background:rgba(0,0,0,0.6);
+    display: none;
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
 }
 
 .modal-content {
-    background:white;
-    margin:8% auto;
-    padding:25px;
-    width:90%;
-    max-width:420px;
-    border-radius:10px;
+    background: white;
+    margin: 5% auto;
+    padding: 25px;
+    width: 90%;
+    max-width: 500px; /* Slightly wider to accommodate video better */
+    border-radius: 10px;
 }
 
 .modal-content h3 {
-    margin-top:0;
+    margin-top: 0;
+    margin-bottom: 15px;
 }
 
-.modal-content input {
-    width:100%;
-    padding:10px;
-    margin-bottom:12px;
-    border-radius:6px;
-    border:1px solid #ccc;
+/* Responsive Video Container */
+.video-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+    height: 0;
+    overflow: hidden;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    background: #000;
 }
 
-.modal-content button {
-    width:100%;
-    padding:10px;
-    border:none;
-    border-radius:6px;
-    background:#16a34a;
-    color:white;
-    cursor:pointer;
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
 }
 
 .close {
-    float:right;
-    cursor:pointer;
-    font-weight:bold;
+    float: right;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+/* Updated Button Styles */
+#submitBtn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    background: #16a34a;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: not-allowed;
+    opacity: 0.6;
+    transition: 0.2s;
 }
 </style>
 </head>
@@ -132,143 +161,133 @@ footer a {
 <body>
 
 <header>
-Welcome to the Community Resources Center!
+Welcome to the Business Community Resources Center!
 </header>
 
 <div class="main-content">
 
 <h2>Connecting You to What You Need</h2>
-<p style="text-align: center;">Simply select anyone of the following or more options shown here at your convenience, fill out the request details form, and information will be delivered staright to the email address on file.</p>
+<p style="text-align: center;">Simply select from anyone of the following options shown here to access anytime at your own convenience.</p>
 
-<p style="text-align: center;">Please be sure to check your email inox and spam folders. Should you run into any issues please email our support team at microburstmediasolutions@outlook.com for assistance.</p>
+<p style="text-align: center;">Should you run into any issues please email our support team at microburstmediasolutions@outlook.com for assistance.</p>
 
 <div class="grid">
 
-<!-- 15 Referral Buttons -->
-
-<div class="card" onclick="openForm('Employment Assistance')">
-<h3>Employment Assistance</h3>
-<p>Connect with publicly available job opportunity resources in your area.</p>
+<div class="card" onclick="openForm('Employment Newsletter', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'https://example.com/employment')">
+    <img src="https://via.placeholder.com/400x200?text=Employment+Image" alt="Employment Newsletter">
+    <h3>Employment Newsletter</h3>
+    <p>Connect to available job opportunities that are looking to hire.</p>
 </div>
 
-<div class="card" onclick="openForm('Small Business Services')">
-<h3>Small Business Services</h3>
-<p>Find professional service providers supporting local business needs.</p>
+<div class="card" onclick="openForm('Legacy Builder Services', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'https://example.com/legacy')">
+    <img src="https://via.placeholder.com/400x200?text=Legacy+Builder+Image" alt="Legacy Builder Services">
+    <h3>Legacy Builder Services</h3>
+    <p>Inquire professional service providers supporting business needs.</p>
 </div>
 
-<div class="card" onclick="openForm('Income Opportunities')">
-<h3>Income Opportunities</h3>
-<p>Access informational resources about earning income options.</p>
+<div class="card" onclick="openForm('Business Funding Options', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'https://example.com/funding')">
+    <img src="https://via.placeholder.com/400x200?text=Funding+Image" alt="Business Funding Options">
+    <h3>Business Funding Options</h3>
+    <p>Access informational resources about business grants and funding opportunities.</p>
 </div>
 
-<div class="card" onclick="openForm('Community Support Programs')">
-<h3>Community Support Programs</h3>
-<p>Explore assistance programs offered within the community.</p>
+<div class="card" onclick="openForm('Residential Loan Services', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'https://example.com/loans')">
+    <img src="https://via.placeholder.com/400x200?text=Loan+Image" alt="Residential Loan Services">
+    <h3>Residential Loan Services</h3>
+    <p>Brokers for home loans who also assist independent contractors and real estate investors.</p>
 </div>
 
-<div class="card" onclick="openForm('Housing Resources')">
-<h3>Housing Resources</h3>
-<p>Locate publicly listed housing and rental assistance programs.</p>
+<div class="card" onclick="openForm('Virtual Mailbox Offers', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'https://example.com/mailbox')">
+    <img src="https://via.placeholder.com/400x200?text=Mailbox+Image" alt="Virtual Mailbox Offers">
+    <h3>Virtual Mailbox Offers</h3>
+    <p>Find virtual mailbox services available to manage your mail online.</p>
 </div>
 
-<div class="card" onclick="openForm('Education & Training')">
-<h3>Education & Training</h3>
-<p>Discover skills development and certification resources.</p>
-</div>
-
-<div class="card" onclick="openForm('Health & Wellness Services')">
-<h3>Health & Wellness Services</h3>
-<p>Find publicly available wellness and support service listings.</p>
-</div>
-
-<div class="card" onclick="openForm('Legal Information Resources')">
-<h3>Legal Information Resources</h3>
-<p>Access general informational resources related to legal services.</p>
-</div>
-
-<div class="card" onclick="openForm('Financial Literacy Resources')">
-<h3>Financial Literacy Resources</h3>
-<p>Review educational materials about budgeting and financial awareness.</p>
-</div>
-
-<div class="card" onclick="openForm('Non-Profit Organizations')">
-<h3>Non-Profit Organizations</h3>
-<p>Explore charitable and non-profit entities serving the community.</p>
-</div>
-
-<div class="card" onclick="openForm('Technology Support Services')">
-<h3>Technology Support Services</h3>
-<p>Find publicly listed technical support and IT service providers.</p>
-</div>
-
-<div class="card" onclick="openForm('Youth Programs')">
-<h3>Youth Programs</h3>
-<p>Discover youth mentorship and enrichment program listings.</p>
-</div>
-
-<div class="card" onclick="openForm('Senior Assistance Services')">
-<h3>Senior Assistance Services</h3>
-<p>Locate publicly available senior support resources.</p>
-</div>
-
-<div class="card" onclick="openForm('Entrepreneurship Programs')">
-<h3>Entrepreneurship Programs</h3>
-<p>Explore startup guidance and small enterprise informational resources.</p>
-</div>
-
-<div class="card" onclick="openForm('Workforce Development')">
-<h3>Workforce Development</h3>
-<p>Access workforce readiness and skills improvement programs.</p>
+<div class="card" onclick="openForm('Market Training Course', 'YOUTUBE_EMBED_URL_HERE', 'DESTINATION_URL_HERE')">
+    <img src="https://via.placeholder.com/400x200?text=Add+Image+URL+Here" alt="Market Training Course">
+    <h3>Market Training Course</h3>
+    <p>Discover digital marketing course materials to development your skills.</p>
 </div>
 
 </div>
 </div>
-
-<!-- Request Form Modal -->
 
 <div id="requestModal" class="modal">
 <div class="modal-content">
 <span class="close" onclick="closeForm()">X</span>
-<h3 id="formTitle">Request Details</h3>
+<h3 id="formTitle">Service Details</h3>
 
-<p style="font-size:13px;color:#555;">
-Please submit your details to receive informational referral resources.
-</p>
+<div class="video-container">
+    <iframe id="presentationVideo" src="" allowfullscreen></iframe>
+</div>
 
-<input type="text" placeholder="Full Name" required>
-<input type="email" placeholder="Email Address" required>
+<form id="agreementForm" onsubmit="event.preventDefault(); submitForm();">
+  <label style="font-size: 12px; cursor: pointer; line-height: 1.5; display: block;">
+    I acknowledge that this web platform provides publicly available referral resources only and I am solely responsible for any and all independent decisions. I agree to the 
+    <a href="#" style="color: blue; text-decoration: underline;">Terms and Conditions</a>.
+    <input type="checkbox" id="agreement" name="agreement" required onchange="toggleSubmitButton()" style="width: auto; margin: 0 0 0 8px; vertical-align: middle; padding: 0;">
+  </label>
 
-<label style="font-size:12px;">
-<input type="checkbox" required>
-I acknowledge this platform provides publicly available referral resources only and I am solely responsible for independent decisions.
-</label>
+  <br>
 
-<button onclick="submitForm()">Submit Request</button>
+  <button type="submit" id="submitBtn" disabled>
+    Access Resource
+  </button>
+</form>
 
 </div>
 </div>
 
 <footer>
-© 2026 Community Resources Referral Center OS™ |
+© 2026 Business Community Resources Referral Center OS™ |
 <a onclick="alert('Affiliate Disclosure: We may receive compensation for certain referrals.')">Affiliate Disclosure</a> |
 <a onclick="alert('Privacy Policy: We collect minimal data for referral routing purposes only.')">Privacy Policy</a> |
-<a onclick="alert('Terms of Service: Use of this platform constitutes agreement to our referral-only policy.')">Terms</a> |
+<a onclick="alert('Terms of Service: Use of this platform constitutes agreement to this websites policies.')">Terms of Service</a> |
 <a onclick="alert('Legal Disclaimer: We do not provide financial, legal, or employment advice.')">Legal Disclaimer</a>
 </footer>
 
 <script>
-function openForm(title){
-    document.getElementById("formTitle").innerText = title + " – Request Details";
+let currentDestinationUrl = ""; // Stores the link for the button
+
+function toggleSubmitButton() {
+    const checkbox = document.getElementById('agreement');
+    const submitBtn = document.getElementById('submitBtn');
+    
+    submitBtn.disabled = !checkbox.checked;
+    
+    if (checkbox.checked) {
+      submitBtn.style.cursor = 'pointer';
+      submitBtn.style.opacity = '1';
+    } else {
+      submitBtn.style.cursor = 'not-allowed';
+      submitBtn.style.opacity = '0.6';
+    }
+}
+
+function openForm(title, videoUrl, destinationUrl){
+    // Update text, video, and save destination URL
+    document.getElementById("formTitle").innerText = title;
+    document.getElementById("presentationVideo").src = videoUrl;
+    currentDestinationUrl = destinationUrl;
+    
+    // Reset checkbox and button state every time modal opens
+    document.getElementById("agreement").checked = false;
+    toggleSubmitButton();
+    
     document.getElementById("requestModal").style.display = "block";
 }
 
 function closeForm(){
     document.getElementById("requestModal").style.display = "none";
+    document.getElementById("presentationVideo").src = ""; // Stops the video from playing in the background when closed
 }
 
 function submitForm(){
-    alert("Request submitted (Design Prototype Mode)");
-    closeForm();
+    // Open the saved destination URL in a new tab
+    if (currentDestinationUrl) {
+        window.open(currentDestinationUrl, '_blank');
+    }
+    closeForm(); // Close the modal after clicking
 }
 
 window.onclick = function(event){
